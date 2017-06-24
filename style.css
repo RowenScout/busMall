@@ -1,0 +1,10 @@
+h1{
+  background-color: grey;
+}
+p {
+  border: 5px solid darkgrey;
+  background-color: grey;
+}
+.page-content {
+  font: comic;
+}
