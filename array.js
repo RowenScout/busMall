@@ -1,36 +1,80 @@
 'use strict';
 
-//Arrays demonstration
+var index = 0;
+var allItems = [];
+var imageIndex = [];
+var displayItems = [];
 
-//arrays are ordered using indexes. Each value is assigned a unique index, begining with 0.
+function Item(name, path) {
+  this.name = name;
+  this.path = path;
+  this.clicks = 0;
+  this.shown = 0;
+  this.index = index++;
+  allItems.push(this);
+}
 
-var names = ['Rowen', 'Rachel', 'Name', 'Name']
+new Item('bag', 'assets/bag.jpg');
+new Item('banana', 'assets/banana.jpg');
+new Item('bathroom', 'assets/bathroom.jpg');
+new Item('boots', 'assets/boots.jpg');
+new Item('breakfast', 'assets/breakfast.jpg');
+new Item('bubblegum', 'assets/bubblegum.jpg');
+new Item('chair', 'assets/chair.jpg');
+new Item('cthulhu', 'assets/cthulhu.jpg');
+new Item('dog-duck', 'assets/dog-duck.jpg');
+new Item('dragon', 'assets/dragon.jpg');
+new Item('pen', 'assets/pen.jpg');
+new Item('scissors', 'assets/scissors.jpg');
+new Item('shark', 'assets/shark.jpg');
+new Item('pet-sweep', 'assets/pet-sweep.jpg');
+new Item('sweep', 'assets/sweep.png');
+new Item('tauntaun', 'assets/tauntaun.jpg');
+new Item('unicorn', 'assets/unicorn.jpg');
+new Item('usb', 'assets/usb.gif');
+new Item('watercan', 'assets/water-can.jpg');
+new Item('wineglass', 'assets/wine-glass.jpg');
 
-var rowen = names[0];
+var img1 = document.getElementById('one');
+var img2 = document.getElementById('two');
+var img3 = document.getElementById('three');
 
-console.log(rowen)
+//generates a random image from our allItems array
+function random() {
+  var index = Math.floor(Math.random() * allItems.length);
+  if (displayItems.indexOf(index) > 0) {
+    index = Math.floor(Math.random() * allItems.length);
+  } else {
+    displayItems.push(index);
+  }
 
-//Will replace index 1 with 'againbutts'.
-names[1]= 'againbutts';
+  return index;
+}
 
-//Adds an item to the end of an array.
-names.push('butts');
+function rand3() {
+  imageIndex[0] = random();
+  img1.setAttribute('src', allItems[imageIndex[0]].path);
+  img1.setAttribute('class', 'choice');
 
-//Removes the last item of an array.
-names.pop();
+  imageIndex[1] = random();
+  while (imageIndex[1] === imageIndex[0])  {
+    imageIndex[1] = random();
+  }
 
-//Adds an item to the begining of an array.
-names.unshift('frontbutts');
+  img2.setAttribute('src', allItems[imageIndex[1]].path);
+  img2.setAttribute('class', 'choice');
 
-//Splice lets us add or remove items from an array.
-//names.splice(index, howmany, item, item);
-//index determines where the splice happens
-//howmany will remove this many values from the array at the index
-//Splice will then add the items into the array at the index
-names.splice(1, 1, 'Scout');
+  imageIndex[2] = random();
+  while (imageIndex[2] === imageIndex[0] || imageIndex[2] === imageIndex[1]) {
+    imageIndex[2] = random();
+  }
 
-//indexOf will search the array for an index containing the data specified in the argument.
-names.indexOf("Rachel");
+  img3.setAttribute('src', allItems[imageIndex[2]].path);
+  img3.setAttribute('class', 'choice');
 
-//example: this will search the array 'name' for Rachel, then remove that item from the array.
-names.splice(name.indexOf("Rachel"), 1);
+  console.log(imageIndex[0]);
+  console.log(imageIndex[1]);
+  console.log(imageIndex[2]);
+}
+
+rand3();

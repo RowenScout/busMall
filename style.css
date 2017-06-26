@@ -1,10 +1,30 @@
-h1{
-  background-color: grey;
+
+*{
+  background: lightblue;
 }
-p {
-  border: 5px solid darkgrey;
-  background-color: grey;
+
+header {
+  text-align: center;
+  color: grey;
 }
-.page-content {
-  font: comic;
+
+h2 {
+  font-weight: bolder;
+}
+
+img {
+  border: 2px;
+}
+
+.box{
+  text-align: center;
+}
+
+.choice{
+  width: 200px;
+  height: 200px;
+}
+
+#one, #two, #three {
+  margin: 5%;
 }
