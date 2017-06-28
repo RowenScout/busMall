@@ -4,6 +4,7 @@
 var i = 0;
 var index = 0;
 var items = [];
+var image = [];
 var imageIndex = [];
 var round = 0;
 
@@ -45,11 +46,7 @@ new Item('wineglass', 'assets/wine-glass.jpg');
 // grabbing the ID of our image elements and assigning them to declared variables
 //I used the 0, 1, 2 naming scheme so that the ID can refer to the item's position
 //in an array. See line 128.
-var image = [];
 
-image[0] = document.getElementById('0');
-image[1] = document.getElementById('1');
-image[2] = document.getElementById('2');
 
 //generates a random index for items array and pushes that index into the
 //displayItems array.
@@ -89,19 +86,16 @@ function genImages() {
 
   for (i = 0; i < 3; i++) {
     imageIndex[i] = random[i];
+    image[i] = document.getElementById(i);
     image[i].setAttribute('src', items[imageIndex[i]].path);
     image[i].setAttribute('class', 'choice');
+    image[i].addEventListener('click', handleSelection);
     console.log('image index' + i + ': ' + imageIndex[i]);
   }
 }
 
 //calling our genImages function to give our image tags a source and a class.
 genImages();
-
-//adding an event listener for each displayed image which calls handleSelection on click
-image[0].addEventListener('click', handleSelection);
-image[1].addEventListener('click', handleSelection);
-image[2].addEventListener('click', handleSelection);
 
 //declaring handleSlection. It tracks how many selections the user has made.
 //it also tracks how many times each image has been selected
@@ -115,7 +109,7 @@ function handleSelection(event) {
   round++;
   if (round === 25) {
     alert('Survey completed!');
-    console.log (items);
+    console.log(items);
   }
 
   var left = 25 - round;
