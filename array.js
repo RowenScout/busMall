@@ -1,17 +1,10 @@
 'use strict';
 
 //declaring global variables
+var i = 0;
 var index = 0;
 var items = [];
-var i = 0;
-
-
 var imageIndex = [];
-
-//this array contains our currently displayed items
-var displayItems = [];
-
-//current number of selections the user has made
 var round = 0;
 
 // a constructor function a lot like the one from Salmon Cookies, but this one
@@ -51,22 +44,17 @@ new Item('wineglass', 'assets/wine-glass.jpg');
 
 // grabbing the ID of our image elements and assigning them to declared variables
 //I used the 0, 1, 2 naming scheme so that the ID can refer to the item's position
-//in an array. See line 114
-var image1 = document.getElementById('0');
-var image2 = document.getElementById('1');
-var image3 = document.getElementById('2');
+//in an array. See line 128.
+var image = [];
+
+image[0] = document.getElementById('0');
+image[1] = document.getElementById('1');
+image[2] = document.getElementById('2');
 
 //generates a random index for items array and pushes that index into the
 //displayItems array.
-function random() {
-  var index = Math.floor(Math.random() * items.length);
-  if (displayItems.indexOf(index) > 0) {
-    index = Math.floor(Math.random() * items.length);
-  } else {
-    displayItems.push(index);
-  }
-
-  return index;
+function randomize() {
+  return Math.floor(Math.random() * items.length);
 }
 
 //this functions sets the source of our images by refering to their paths via indices.
@@ -74,51 +62,60 @@ function random() {
 //for the 2nd and 3rd images a comparison generates new numbers if there is any
 //duplication
 function genImages() {
-  imageIndex[0] = random();
-  image1.setAttribute('src', items[imageIndex[0]].path);
-  image1.setAttribute('class', 'choice');
-
-  imageIndex[1] = random();
-  while (imageIndex[1] === imageIndex[0])  {
-    imageIndex[1] = random();
+  //first image
+  var random = [];
+  random[0] = randomize();
+  while (random[0] === imageIndex[0] ||
+         random[0] === imageIndex[1] ||
+         random[0] === imageIndex[2]) { random[0] = randomize();
   }
 
-  image2.setAttribute('src', items[imageIndex[1]].path);
-  image2.setAttribute('class', 'choice');
-
-  imageIndex[2] = random();
-  while (imageIndex[2] === imageIndex[0] || imageIndex[2] === imageIndex[1]) {
-    imageIndex[2] = random();
+  //second image
+  random[1] = randomize();
+  while (random[1] === random[0] ||
+         random[1] === imageIndex[0] ||
+         random[1] === imageIndex[1] ||
+         random[1] === imageIndex[2]) { random[1] = randomize();
   }
 
-  image3.setAttribute('src', items[imageIndex[2]].path);
-  image3.setAttribute('class', 'choice');
+  //third image
+  random[2] = randomize();
+  while (random[2] === random[0] ||
+         random[2] === random[1] ||
+         random[2] === imageIndex[0] ||
+         random[2] === imageIndex[1] ||
+         random[2] === imageIndex[2]) { random[2] = randomize();
+  }
 
-  console.log(imageIndex[0]);
-  console.log(imageIndex[1]);
-  console.log(imageIndex[2]);
+  for (i = 0; i < 3; i++) {
+    imageIndex[i] = random[i];
+    image[i].setAttribute('src', items[imageIndex[i]].path);
+    image[i].setAttribute('class', 'choice');
+    console.log('image index' + i + ': ' + imageIndex[i]);
+  }
 }
 
-//calling out rand3 function which gives our image tags a source and a class.
+//calling our genImages function to give our image tags a source and a class.
 genImages();
 
 //adding an event listener for each displayed image which calls handleSelection on click
-image1.addEventListener('click', handleSelection);
-image2.addEventListener('click', handleSelection);
-image3.addEventListener('click', handleSelection);
+image[0].addEventListener('click', handleSelection);
+image[1].addEventListener('click', handleSelection);
+image[2].addEventListener('click', handleSelection);
 
 //declaring handleSlection. It tracks how many selections the user has made.
 //it also tracks how many times each image has been selected
 //as well as the number of times each image has been displayed.
-function handleSelection() {
+function handleSelection(event) {
   items[imageIndex[+event.target.id]].clicks++;
   for (i = 0; i < 2; i++) {
-    items[imageIndex[i]].numDisplays++;
+    items[imageIndex[i]].shown++;
   }
 
   round++;
   if (round === 25) {
     alert('Survey completed!');
+    console.log (items);
   }
 
   var left = 25 - round;
