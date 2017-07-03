@@ -91,6 +91,26 @@ function genImages() {
   }
 }
 
+var dataSet;
+
+//broken, still working on this
+
+if (localStorage.clicks) {
+  var stringData = localStorage.clicks;
+  console.log(stringifiedData);
+
+  dataSet = JSON.parse(stringData);
+} else {
+  dataSet = [];
+}
+
+saveStatsToLocalStorage(dataSet);
+
+function saveLocalStorage(clicks) {
+  var statsString = JSON.stringify(clicks);
+  localStorage.clicks = statsString;
+};
+
 //declaring handleSlection. It tracks how many selections the user has made.
 //it also tracks how many times each image has been selected, holds my chart,
 //and records the number of times each image has been displayed.
@@ -158,6 +178,9 @@ function handleSelection(event) {
     genImages();
   }
 }
+
+
+
 
 //calling our genImages function to give our image tags a source and a class.
 genImages();
