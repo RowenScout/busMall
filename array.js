@@ -7,6 +7,9 @@ var items = [];
 var image = [];
 var imageIndex = [];
 var round = 0;
+var percentClicked = [];
+var timesClicked = [];
+var names = [];
 
 // a constructor function a lot like the one from Salmon Cookies, but this one
 //keeps track of it's index in the items array.
@@ -15,8 +18,10 @@ function Item(name, path) {
   this.path = path;
   this.shown = 0;
   this.clicks = 0;
+  this.clicksPerShown = 0;
   this.index = index++;
   items.push(this);
+  names.push(this.name);
 }
 
 //creating all of our items using the object constructor. I really wanted
@@ -43,11 +48,6 @@ new Item('usb', 'assets/usb.gif');
 new Item('watercan', 'assets/water-can.jpg');
 new Item('wineglass', 'assets/wine-glass.jpg');
 
-// grabbing the ID of our image elements and assigning them to declared variables
-//I used the 0, 1, 2 naming scheme so that the ID can refer to the item's position
-//in an array. See line 128.
-
-
 //generates a random index for items array and pushes that index into the
 //displayItems array.
 function randomize() {
@@ -56,10 +56,8 @@ function randomize() {
 
 //this functions sets the source of our images by refering to their paths via indices.
 //it also applies a class to them so that they resize.
-//for the 2nd and 3rd images a comparison generates new numbers if there is any
-//duplication
 function genImages() {
-  //first image
+  //first image. Unconventional styling but the linter likes it.
   var random = [];
   random[0] = randomize();
   while (random[0] === imageIndex[0] ||
@@ -90,16 +88,12 @@ function genImages() {
     image[i].setAttribute('src', items[imageIndex[i]].path);
     image[i].setAttribute('class', 'choice');
     image[i].addEventListener('click', handleSelection);
-    console.log('image index' + i + ': ' + imageIndex[i]);
   }
 }
 
-//calling our genImages function to give our image tags a source and a class.
-genImages();
-
 //declaring handleSlection. It tracks how many selections the user has made.
-//it also tracks how many times each image has been selected
-//as well as the number of times each image has been displayed.
+//it also tracks how many times each image has been selected, holds my chart,
+//and records the number of times each image has been displayed.
 function handleSelection(event) {
   items[imageIndex[+event.target.id]].clicks++;
   for (i = 0; i < 2; i++) {
@@ -109,10 +103,61 @@ function handleSelection(event) {
   round++;
   if (round === 25) {
     alert('Survey completed!');
-    console.log(items);
+
+    var imgParent = document.querySelector('section');
+
+    for (i = 0; i < 3; i++) {
+      imgParent.removeChild(document.getElementById(i));
+    }
+
+    //results calculation and display
+    for (var i = 0; i < items.length; i++) {
+      items[i].clicksPerShown = items[i].clicks / items[i].shown;
+      console.log('index ' + i + ' was chosen ' + (items[i].clicksPerShown * 100) + '% of the times it was shown.');
+      percentClicked.push(items[i].clicksPerShown);
+      timesClicked.push(items[i].clicks);
+    }
+
+    //I didn't want to copy/paste the colors into this array so
+    //I made a for loop to rotate them for me.
+    var barColor = ['cyan', 'purple', 'yellow'];
+    for (var o = 0; o < 8; o++) {
+      for (var i = 0; i < 3; i++) {
+        barColor.push(barColor[i]);
+      }
+    }
+
+    var context = document.getElementById('my-chart').getContext('2d');
+    var myChart = new Chart(context, {
+      type: 'bar',
+      data: {
+        labels: names,
+        datasets: [{
+          label: 'Number of times clicked',
+          data: timesClicked,
+          backgroundColor: barColor,
+        }],
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+            },
+          },]
+        },
+      },
+    });
   }
 
   var left = 25 - round;
-  alert(left + ' Selection(s) remaining.');
-  genImages();
+  var results = document.getElementById('results');
+  results.textContent = left + ' selections remaining';
+
+  if (round < 25) {
+    genImages();
+  }
 }
+
+//calling our genImages function to give our image tags a source and a class.
+genImages();

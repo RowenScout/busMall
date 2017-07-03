@@ -24,3 +24,12 @@ img {
 #one, #two, #three {
   margin: 5%;
 }
+
+#results{
+  text-align: center;
+}
+
+#chart-div {
+  width: 50%;
+  min-width: 600px;
+}
