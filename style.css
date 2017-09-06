@@ -1,0 +1,35 @@
+
+*{
+  background: lightblue;
+}
+
+header {
+  text-align: center;
+  color: grey;
+}
+
+img {
+  border: 2px;
+}
+
+.box{
+  text-align: center;
+}
+
+.choice{
+  width: 200px;
+  height: 200px;
+}
+
+#one, #two, #three {
+  margin: 5%;
+}
+
+#results{
+  text-align: center;
+}
+
+#chart-div {
+  width: 50%;
+  min-width: 600px;
+}
